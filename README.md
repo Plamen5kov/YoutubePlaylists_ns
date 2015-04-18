@@ -1,6 +1,5 @@
 # YoutubePlaylists_ns 
-================
-
+=====
 This is a simple app working with google's YouTube Data API (v3).
 
 ## Before you start
