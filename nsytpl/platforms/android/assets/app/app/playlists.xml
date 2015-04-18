@@ -1,0 +1,10 @@
+<Page loaded="onLoaded" >
+	<ListView items="{{playlists}}">
+	 	<ListView.itemTemplate>
+	 		<StackLayout>
+				<Label text="{{ title }}" cssClass="title" />
+				<Label text="{{ id }}" cssClass="ids" />
+			</StackLayout>
+		</ListView.itemTemplate>
+	</ListView>
+</Page>

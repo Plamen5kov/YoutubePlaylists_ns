@@ -1,0 +1,10 @@
+// in order for these steps to work you  need to have keytool in the path (it's located where you installed JRE\bin);
+
+//generate custom keystore
+keytool -genkey -v -keystore aaaa.keystore -alias aaaa-alias -keyalg RSA -keysize 2048 -validity 10000
+
+//get SHA1 from custon keystore
+keytool -v -list -alias aaaa-alias -keystore aaaa.keystore -storepass aaaaaa -keypass aaaaaa
+
+//run tns and show it path to custom keystore, so tns can sign the apk file
+tns run android --keyStorePath .\..\..\aaaa.keystore --keyStorePassword aaaaaa --keyStoreAlias aaaa-alias --keyStoreAliasPassword aaaaaa --release
