@@ -1,6 +1,6 @@
 # YoutubePlaylists_ns 
 =====
-This is a simple app working with google's YouTube Data API (v3).
+NativeScript project working with google's YouTube Data API (v3). Simple app enabling some customizations on your youtube playlists.
 
 ## Before you start
 
@@ -12,7 +12,10 @@ npm install nativescript -g
 
 ## Steps to run project
 
-* git clone https://github.com/Plamen5kov/YoutubePlaylists_ns.git
+*install project
+```Shell
+git clone https://github.com/Plamen5kov/YoutubePlaylists_ns.git
+```
 * go to where you cloned the repo and then inside "nsytpl" folder (e.g. D:\YoutubePlaylists_ns\nsytpl) 
 * open cmd window there ( Shift + Right Click  -> Open command window here)
 * run android project with cli (this and other commands are in the YoutubePlaylists_ns\nsytpl\useful_commands.txt)
