@@ -20,5 +20,5 @@ npm install nativescript -g
 ```Shell
 tns run android --keyStorePath .\..\..\aaaa.keystore --keyStorePassword aaaaaa --keyStoreAlias aaaa-alias --keyStoreAliasPassword aaaaaa --release
 ```
-==============
-## https://www.nativescript.org/
+## Learn more about NativeScript
+### https://www.nativescript.org/
