@@ -12,7 +12,7 @@ npm install nativescript -g
 
 ## Steps to run project
 
-*install project
+* install project
 ```Shell
 git clone https://github.com/Plamen5kov/YoutubePlaylists_ns.git
 ```
