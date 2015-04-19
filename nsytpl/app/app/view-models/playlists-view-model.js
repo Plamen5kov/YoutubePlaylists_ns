@@ -6,7 +6,7 @@ var __extends = this.__extends || function (d, b) {
 };
 
 var observableArrayModule = require("data/observable-array");
-var playlistItemModule = require('./playlist-item-model');
+var playlistItemModule = require('./playlists-item-view-model');
 
 var ListViewModel = (function (_super) {
     __extends(ListViewModel, _super);
@@ -20,7 +20,17 @@ var ListViewModel = (function (_super) {
             this._listViewItems.push(newPlaylistItem);
 	};
 
-    Object.defineProperty(ListViewModel.prototype, "playlists", {
+    ListViewModel.prototype.getItem = function(index){
+        return this._listViewItems.getItem(index);
+    }
+
+    Object.defineProperty(ListViewModel.prototype, 'length', {
+        get: function () {
+            return this._listViewItems.length;
+        }
+    })
+
+    Object.defineProperty(ListViewModel.prototype, 'playlists', {
         get: function () {
         	return this._listViewItems;
         },

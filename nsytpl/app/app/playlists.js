@@ -1,8 +1,10 @@
-var http = require("http");
-var localSettings = require("local-settings");
-var view = require("ui/core/view");
-var playlistViewModule = require('./view-models/list-view-model');
-var labelModule = require("ui/label");
+var http = require('http');
+var view = require('ui/core/view');
+var labelModule = require('ui/label');
+var frameModule = require('ui/frame');
+var localSettings = require('local-settings');
+
+var playlistViewModule = require('./view-models/playlists-view-model');
 
 var page;
 var playlistViewModel;
@@ -13,7 +15,21 @@ function onLoaded(args){
 	playlistViewModel  = playlistViewModule.listViewModel;
 	page.bindingContext = playlistViewModel;
 
-	makePlaylistRequest();
+	var webView = view.getViewById(page, 'lv_playlists');
+	webView.on('itemTap', requestTapedPlaylist);
+
+	if(playlistViewModel.length == 0) {
+		makePlaylistRequest();
+	}
+}
+
+function requestTapedPlaylist(args) {
+
+	var id = playlistViewModel.getItem(args.index).id;
+	localSettings.setString('clicked_playlist_id', id);
+	
+	var topmost = frameModule.topmost();
+	topmost.navigate('app/playlist');
 }
 
 function makePlaylistRequest(){

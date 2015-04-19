@@ -7,12 +7,12 @@ var __extends = this.__extends || function (d, b) {
 
 var observable = require("data/observable");
 
-var PlaylistItemModel = (function (_super) {
+var SongsItemViewModel = (function (_super) {
 
-    __extends(PlaylistItemModel, _super);
+    __extends(SongsItemViewModel, _super);
 
     //constructor
-    function PlaylistItemModel(source) {
+    function SongsItemViewModel(source) {
         _super.call(this);
 
         //save javascript object to _source
@@ -22,15 +22,7 @@ var PlaylistItemModel = (function (_super) {
             this.set(property, this._source[property]); //generate observable property for each js object prop
         }
     }
-
-    Object.defineProperty(PlaylistItemModel.prototype, "source", {
-        get: function () {
-            return this._source; //when someone wants the source to bind to return the js object
-        },
-        enumerable: true,
-        configurable: true
-    });
     
-    return PlaylistItemModel;
+    return SongsItemViewModel;
 })(observable.Observable);
-exports.PlaylistItemModel = PlaylistItemModel;
+exports.SongsItemViewModel = SongsItemViewModel;

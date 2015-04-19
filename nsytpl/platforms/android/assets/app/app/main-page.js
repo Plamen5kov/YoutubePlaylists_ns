@@ -18,7 +18,7 @@ function createWebView() {
 	//got from google developer console
 	var client_id = '17768073744-g4eihoob0hqb7linved768cuco6ihho1.apps.googleusercontent.com';
 	var redirect_url = "http%3A%2F%2Flocalhost";
-	var scope = "https://www.googleapis.com/auth/youtube";
+	var scope = "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload";
 	var url = "https://accounts.google.com/o/oauth2/auth?client_id="+ client_id +"&redirect_uri=" + redirect_url + "&scope=" + scope + "&response_type=code&access_type=offline";
 
 	webView = new webViewModule.WebView();

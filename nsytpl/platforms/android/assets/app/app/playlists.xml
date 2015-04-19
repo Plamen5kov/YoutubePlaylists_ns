@@ -1,5 +1,5 @@
 <Page loaded="onLoaded" >
-	<ListView items="{{playlists}}">
+	<ListView items="{{playlists}}" id="lv_playlists">
 	 	<ListView.itemTemplate>
 	 		<StackLayout>
 				<Label text="{{ title }}" cssClass="title" />
