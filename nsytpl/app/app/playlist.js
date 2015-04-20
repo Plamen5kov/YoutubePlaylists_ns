@@ -1,4 +1,7 @@
 var http = require('http');
+var frameModule = require('ui/frame');
+var viewModule = require("ui/core/view");
+var gesturesModule = require("ui/gestures");
 var localSettingsModule = require('local-settings');
 var songsViewModule = require('./view-models/songs-view-model');
 
@@ -9,8 +12,9 @@ function onPageLoaded(args){
 	//get song id
 	var clicked_playlist_id = localSettingsModule.getString('clicked_playlist_id');
 	listViewModel = songsViewModule.songsViewModel;
-
 	page.bindingContext = listViewModel;
+
+	// songsListView.observe(gesturesModule.GestureTypes.LongPress, function (args) {});
 
 	makeRequestForSongs(clicked_playlist_id);	
 }
@@ -31,15 +35,16 @@ function makeRequestForSongs(playlistId){
 		    var jsonString = JSON.stringify(response.content);
 
 		    var items = resultJson.items
+		    var counter = 0;
 		  	for(var item in items) {
 
 				var songItemInfo = {
 					title: items[item].snippet.title,
-					id: items[item].id
+					// id: items[item].id
+					id: counter
 				}
-				console.log('------> ' + songItemInfo.title);
-				console.log('------> ' + songItemInfo.id);
 				listViewModel.addItem(songItemInfo);
+				counter++;
 		  	}
 
 		}, function (e) {
@@ -48,4 +53,30 @@ function makeRequestForSongs(playlistId){
 	);
 }
 
+function onMoveUp(args) {
+	var stackLayout = args.object.parent.parent;
+	viewModule.eachDescendant(stackLayout, moveItemUp);
+}
+
+function onMoveDown(args) {
+	var stackLayout = args.object.parent.parent;
+	viewModule.eachDescendant(stackLayout, moveItemDown);
+}
+
+function moveItemUp(currentView) {
+	var index = currentView.text;
+	if(typeof(index) == 'number') {
+		listViewModel.moveItem(index, 'up');	
+	}
+}
+
+function moveItemDown(currentView) {
+	var index = currentView.text;
+	if(typeof(index) == 'number') {
+		listViewModel.moveItem(index, 'down');	
+	}
+}
+
+exports.onMoveDown = onMoveDown;
+exports.onMoveUp = onMoveUp;
 exports.onPageLoaded = onPageLoaded;

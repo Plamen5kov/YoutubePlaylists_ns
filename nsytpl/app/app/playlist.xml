@@ -3,7 +3,11 @@
 	 	<ListView.itemTemplate>
 	 		<StackLayout>
 				<Label text="{{ title }}" cssClass="title" />
-				<Label text="{{ id }}" cssClass="ids" />
+				<Label text="{{ id }}" id="{{ id }}" cssClass="ids" />
+				<StackLayout orientation="horizontal" cssClass='buttons'>
+					<Button text="move up" tap="onMoveUp" />
+					<Button text="move down" tap="onMoveDown" />
+				</StackLayout>
 			</StackLayout>
 		</ListView.itemTemplate>
 	</ListView>

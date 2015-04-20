@@ -9,6 +9,7 @@ var observableArrayModule = require("data/observable-array");
 var songsItemViewModel = require('./songs-item-view-model');
 
 var SongsViewModel = (function (_super) {
+
     __extends(SongsViewModel, _super);
     function SongsViewModel() {
         _super.call(this);
@@ -19,6 +20,43 @@ var SongsViewModel = (function (_super) {
         var newPlaylistItem = new songsItemViewModel.SongsItemViewModel(item);
         this._listViewItems.push(newPlaylistItem);
 	};
+
+    SongsViewModel.prototype.moveItem = function (index, direction) {
+        var itemToSwapWithIndex;
+
+        if(direction == 'up') {
+            itemToSwapWithIndex = index - 1;
+
+            if(itemToSwapWithIndex == -1) {
+                itemToSwapWithIndex = this._listViewItems.length - 1;
+            }    
+        }
+        else if (direction == 'down') {
+            itemToSwapWithIndex = index + 1;
+
+            if(itemToSwapWithIndex == this._listViewItems.length) {
+                itemToSwapWithIndex = 0;
+            }    
+        }
+
+        this.swapItemsWithIndecies(index, itemToSwapWithIndex);
+    };   
+
+    SongsViewModel.prototype.swapItemsWithIndecies = function (firstIndex, secondIndex) {
+
+        var itemToSwap = this._listViewItems.getItem(firstIndex);
+        var upperItem = this._listViewItems.getItem(secondIndex);
+
+        //swap indecies
+        upperItem.set('id', firstIndex);
+        itemToSwap.id = secondIndex;
+
+        //swap items
+        this._listViewItems.setItem(secondIndex, itemToSwap);
+        this._listViewItems.setItem(firstIndex, upperItem);
+
+        itemToSwap = undefined;
+    } 
 
     SongsViewModel.prototype.getItem = function(index){
         return this._listViewItems.getItem(index);
