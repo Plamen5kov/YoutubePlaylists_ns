@@ -1,4 +1,5 @@
 var http = require('http');
+var fs = require("file-system");
 var view = require('ui/core/view');
 var labelModule = require('ui/label');
 var frameModule = require('ui/frame');
@@ -12,15 +13,29 @@ var playlistViewModel;
 function onLoaded(args){
 	page = args.object;
 
+	takeAccessTokenFromFile();
+
 	playlistViewModel  = playlistViewModule.listViewModel;
 	page.bindingContext = playlistViewModel;
 
-	var webView = view.getViewById(page, 'lv_playlists');
-	webView.on('itemTap', requestTapedPlaylist);
+	var listView = view.getViewById(page, 'lv_playlists');
+	listView.on('itemTap', requestTapedPlaylist);
 
 	if(playlistViewModel.length == 0) {
 		makePlaylistRequest();
 	}
+}
+
+function takeAccessTokenFromFile() {
+	var documents = fs.knownFolders.documents();
+	var myFile = documents.getFile("access_token.txt");
+	var written;
+	// Writing text to the file.
+	myFile.readText().then(function (content) {
+        localSettings.setString('access_token', content);
+    }, function (error) {
+        console.log('>> couldnt read access token');
+    });
 }
 
 function requestTapedPlaylist(args) {

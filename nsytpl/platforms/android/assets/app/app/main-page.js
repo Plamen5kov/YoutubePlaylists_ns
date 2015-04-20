@@ -1,5 +1,6 @@
 var coreView = require("ui/core/view");
 var http = require("http");
+var fs = require("file-system");
 var app = require("application");
 var webViewModule = require("ui/web-view");
 var uilayoutsstack_layout = require("ui/layouts/stack-layout");
@@ -10,9 +11,28 @@ var webView;
 
 function onPageLoaded(args){
 	var page = args.object;
-	createWebView();
-	page.content = webView;;
+
+	if(!canGetAccessTokenFromFile()){
+		console.log('---- creating a web view');
+		createWebView();
+		page.content = webView;;
+	}
+	else {
+		console.log('----------------------- navigating to playlists page')
+		var topmost = frameModule.topmost();
+	    topmost.navigate('app/playlists');
+	}
 };
+
+function canGetAccessTokenFromFile() {
+	var documents = fs.knownFolders.documents();
+	var path = fs.path.join(documents.path, "access_token.txt");
+	var exists = fs.File.exists(path);
+
+	console.log('--------- FILE EXISTS: ' + exists);
+
+	return exists;
+}
 
 function createWebView() {
 	//got from google developer console
@@ -60,6 +80,8 @@ function postRequestForAccessToken(code){
     	localSettings.setString("access_token", resultJson.access_token);	
     	localSettings.setString("refresh_token", resultJson.access_token);
 
+    	saveAccessTokenToFile(resultJson.access_token);
+
 	    var topmost = frameModule.topmost();
 	    topmost.navigate('app/playlists');
 
@@ -67,5 +89,19 @@ function postRequestForAccessToken(code){
 	    console.log('<<< ERROR WITH REQUEST FOR ACCESS CODE >>>> ' + e);
 	});
 };
+
+function saveAccessTokenToFile(token) {
+
+	var documents = fs.knownFolders.documents();
+	var path = fs.path.join(documents.path, "access_token.txt");
+	var file = fs.File.fromPath(path);
+
+	// Writing text to the file.
+	file.writeText(token).then(function () {
+	    console.log('>> succeeded writing access token to a file');
+	}, function (error) {
+	    console.log('>> failed writing access token to a file');
+	});
+}
 
 exports.onPageLoaded = onPageLoaded;
