@@ -23,7 +23,7 @@ function onPageLoaded(args){
 }
 
 function makeRequestForSongs(playlistId){
-	var api_key =  localSettings.getString('api_key');//'AIzaSyA6J5VCyFQYXcny_U0uWpZTq1oJRavQ_kM';
+	var api_key =  localSettings.getString('api_key');
 
 	var requestUrl = 'https://content.googleapis.com/youtube/v3/playlistItems?part=snippet' + '&playlistId=' + playlistId + '&key=' + api_key
 	var requestOptions = {

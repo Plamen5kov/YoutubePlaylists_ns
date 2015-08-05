@@ -49,7 +49,7 @@ function requestTapedPlaylist(args) {
 
 function makePlaylistRequest(){
 	//got from google developer console
-	var api_key =  localSettings.getString('api_key')//'AIzaSyA6J5VCyFQYXcny_U0uWpZTq1oJRavQ_kM';//any referer allowed
+	var api_key =  localSettings.getString('api_key')
 	var finalUrl = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=' + api_key;
 
 	var requestOptions = {
