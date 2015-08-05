@@ -8,6 +8,9 @@ var songsViewModule = require('./view-models/songs-view-model');
 var listViewModel;
 
 function onPageLoaded(args){
+
+	console.log('------> TRYING TO LOAD PLAYLISTS!!!');
+
 	var page = args.object;
 	//get song id
 	var clicked_playlist_id = localSettingsModule.getString('clicked_playlist_id');

@@ -36,7 +36,7 @@ function canGetAccessTokenFromFile() {
 
 function createWebView() {
 	//got from google developer console
-	var client_id = '17768073744-g4eihoob0hqb7linved768cuco6ihho1.apps.googleusercontent.com';
+	var client_id = '17768073744-916dji6s23abt1pg7flrhi0n8fvseh6g.apps.googleusercontent.com';
 	var redirect_url = "http%3A%2F%2Flocalhost";
 	var scope = "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload";
 	var url = "https://accounts.google.com/o/oauth2/auth?client_id="+ client_id +"&redirect_uri=" + redirect_url + "&scope=" + scope + "&response_type=code&access_type=offline";
@@ -59,7 +59,7 @@ function postRequestForAccessToken(code){
 
 	var domain = "https://accounts.google.com";
 	var parameters = "/o/oauth2/token?";
-	var client_id = "17768073744-g4eihoob0hqb7linved768cuco6ihho1.apps.googleusercontent.com";
+	var client_id = "17768073744-916dji6s23abt1pg7flrhi0n8fvseh6g.apps.googleusercontent.com";
 	var redirect_url = "http%3A%2F%2Flocalhost";
 	var grant_type = "authorization_code";
 
@@ -79,6 +79,8 @@ function postRequestForAccessToken(code){
 
     	localSettings.setString("access_token", resultJson.access_token);	
     	localSettings.setString("refresh_token", resultJson.access_token);
+
+    	console.log('---------> ' +  resultJson.access_token);
 
     	saveAccessTokenToFile(resultJson.access_token);
 
