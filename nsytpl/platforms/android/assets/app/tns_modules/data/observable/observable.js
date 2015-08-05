@@ -1,14 +1,26 @@
 var types = require("utils/types");
-var knownEvents;
-(function (knownEvents) {
-    knownEvents.propertyChange = "propertyChange";
-})(knownEvents = exports.knownEvents || (exports.knownEvents = {}));
 var Observable = (function () {
     function Observable(json) {
         this._observers = {};
         if (json) {
+            this._map = new Map();
+            var that = this;
+            var definePropertyFunc = function definePropertyFunc(propertyName) {
+                Object.defineProperty(Observable.prototype, propertyName, {
+                    get: function () {
+                        return that._map.get(propertyName);
+                    },
+                    set: function (value) {
+                        that._map.set(propertyName, value);
+                        that.notify(that._createPropertyChangeData(propertyName, value));
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+            };
             for (var prop in json) {
                 if (json.hasOwnProperty(prop)) {
+                    definePropertyFunc(prop);
                     this.set(prop, json[prop]);
                 }
             }
@@ -24,8 +36,8 @@ var Observable = (function () {
     Observable.prototype.on = function (eventNames, callback, thisArg) {
         this.addEventListener(eventNames, callback, thisArg);
     };
-    Observable.prototype.off = function (eventNames, callback) {
-        this.removeEventListener(eventNames, callback);
+    Observable.prototype.off = function (eventNames, callback, thisArg) {
+        this.removeEventListener(eventNames, callback, thisArg);
     };
     Observable.prototype.addEventListener = function (eventNames, callback, thisArg) {
         types.verifyCallback(callback);
@@ -97,7 +109,7 @@ var Observable = (function () {
     };
     Observable.prototype._createPropertyChangeData = function (name, value) {
         return {
-            eventName: knownEvents.propertyChange,
+            eventName: Observable.propertyChangeEvent,
             propertyName: name,
             object: this,
             value: value
@@ -142,6 +154,7 @@ var Observable = (function () {
     Observable.prototype.toString = function () {
         return this.typeName;
     };
+    Observable.propertyChangeEvent = "propertyChange";
     return Observable;
 })();
 exports.Observable = Observable;

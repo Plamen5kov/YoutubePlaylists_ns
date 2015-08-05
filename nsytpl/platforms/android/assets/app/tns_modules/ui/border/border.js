@@ -4,53 +4,52 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var borderCommon = require("ui/border/border-common");
-var color = require("color");
-require("utils/module-merge").merge(borderCommon, exports);
-function onCornerRadiusPropertyChanged(data) {
-    var view = data.object;
-    if (!view._nativeView) {
-        return;
+if (typeof __decorate !== "function") __decorate = function (decorators, target, key, desc) {
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
+    switch (arguments.length) {
+        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
+        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
+        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
-    if (view._nativeView instanceof android.view.ViewGroup) {
-        var gd = new android.graphics.drawable.GradientDrawable();
-        gd.setCornerRadius(data.newValue);
-        gd.setStroke(view.borderWidth, view.borderColor.android);
-        view._nativeView.setBackgroundDrawable(gd);
-    }
-}
-borderCommon.Border.cornerRadiusProperty.metadata.onSetNativeValue = onCornerRadiusPropertyChanged;
-function onBorderWidthPropertyChanged(data) {
-    var view = data.object;
-    if (!view._nativeView) {
-        return;
-    }
-    if (view._nativeView instanceof android.view.ViewGroup) {
-        var gd = new android.graphics.drawable.GradientDrawable();
-        gd.setCornerRadius(view.cornerRadius);
-        gd.setStroke(data.newValue, view.borderColor.android);
-        view._nativeView.setBackgroundDrawable(gd);
-    }
-}
-borderCommon.Border.borderWidthProperty.metadata.onSetNativeValue = onBorderWidthPropertyChanged;
-function onBorderColorPropertyChanged(data) {
-    var view = data.object;
-    if (!view._nativeView) {
-        return;
-    }
-    if (view._nativeView instanceof android.view.ViewGroup && data.newValue instanceof color.Color) {
-        var gd = new android.graphics.drawable.GradientDrawable();
-        gd.setCornerRadius(view.cornerRadius);
-        gd.setStroke(view.borderWidth, data.newValue.android);
-        view._nativeView.setBackgroundDrawable(gd);
-    }
-}
-borderCommon.Border.borderColorProperty.metadata.onSetNativeValue = onBorderColorPropertyChanged;
+};
+var contentView = require("ui/content-view");
+var viewModule = require("ui/core/view");
+var utils = require("utils/utils");
 var Border = (function (_super) {
     __extends(Border, _super);
     function Border() {
         _super.apply(this, arguments);
     }
+    Object.defineProperty(Border.prototype, "cornerRadius", {
+        get: function () {
+            return this.borderRadius;
+        },
+        set: function (value) {
+            this.borderRadius = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Border.prototype.onMeasure = function (widthMeasureSpec, heightMeasureSpec) {
+        var width = utils.layout.getMeasureSpecSize(widthMeasureSpec);
+        var widthMode = utils.layout.getMeasureSpecMode(widthMeasureSpec);
+        var height = utils.layout.getMeasureSpecSize(heightMeasureSpec);
+        var heightMode = utils.layout.getMeasureSpecMode(heightMeasureSpec);
+        var density = utils.layout.getDisplayDensity();
+        var borderSize = (2 * this.borderWidth) * density;
+        var result = viewModule.View.measureChild(this, this.content, utils.layout.makeMeasureSpec(width - borderSize, widthMode), utils.layout.makeMeasureSpec(height - borderSize, heightMode));
+        var widthAndState = viewModule.View.resolveSizeAndState(result.measuredWidth + borderSize, width, widthMode, 0);
+        var heightAndState = viewModule.View.resolveSizeAndState(result.measuredHeight + borderSize, height, heightMode, 0);
+        this.setMeasuredDimension(widthAndState, heightAndState);
+    };
+    Border.prototype.onLayout = function (left, top, right, bottom) {
+        var density = utils.layout.getDisplayDensity();
+        var borderSize = this.borderWidth * density;
+        viewModule.View.layoutChild(this, this.content, borderSize, borderSize, right - left - borderSize, bottom - top - borderSize);
+    };
+    Border = __decorate([
+        Deprecated
+    ], Border);
     return Border;
-})(borderCommon.Border);
+})(contentView.ContentView);
 exports.Border = Border;

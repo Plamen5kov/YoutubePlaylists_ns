@@ -3,19 +3,22 @@ var types = require("utils/types");
 require("utils/module-merge").merge(httpRequest, exports);
 function getString(arg) {
     return new Promise(function (resolve, reject) {
-        httpRequest.request(typeof arg === "string" ? { url: arg, method: "GET" } : arg).then(function (r) { return resolve(r.content.toString()); }, function (e) { return reject(e); });
+        httpRequest.request(typeof arg === "string" ? { url: arg, method: "GET" } : arg)
+            .then(function (r) { return resolve(r.content.toString()); }, function (e) { return reject(e); });
     });
 }
 exports.getString = getString;
 function getJSON(arg) {
     return new Promise(function (resolve, reject) {
-        httpRequest.request(typeof arg === "string" ? { url: arg, method: "GET" } : arg).then(function (r) { return resolve(r.content.toJSON()); }, function (e) { return reject(e); });
+        httpRequest.request(typeof arg === "string" ? { url: arg, method: "GET" } : arg)
+            .then(function (r) { return resolve(r.content.toJSON()); }, function (e) { return reject(e); });
     });
 }
 exports.getJSON = getJSON;
 function getImage(arg) {
     return new Promise(function (resolve, reject) {
-        httpRequest.request(typeof arg === "string" ? { url: arg, method: "GET" } : arg).then(function (r) {
+        httpRequest.request(typeof arg === "string" ? { url: arg, method: "GET" } : arg)
+            .then(function (r) {
             r.content.toImage().then(function (source) { return resolve(source); });
         }, function (e) { return reject(e); });
     });
@@ -80,6 +83,7 @@ var XMLHttpRequest = (function () {
                 }
             }).catch(function (e) {
                 _this._errorFlag = true;
+                _this._setReadyState(_this.DONE);
             });
         }
     };
@@ -101,7 +105,10 @@ var XMLHttpRequest = (function () {
         return result.substr(0, result.length - 2);
     };
     XMLHttpRequest.prototype.getResponseHeader = function (header) {
-        if (types.isString(header) && this._readyState > 1 && this._headers && this._headers[header] && !this._errorFlag) {
+        if (types.isString(header) && this._readyState > 1
+            && this._headers
+            && this._headers[header]
+            && !this._errorFlag) {
             return this._headers[header];
         }
         return null;
@@ -115,11 +122,34 @@ var XMLHttpRequest = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(XMLHttpRequest.prototype, "responseType", {
+        get: function () {
+            return this._responseType;
+        },
+        set: function (value) {
+            if (value === "" || value === "text") {
+                this._responseType = value;
+            }
+            else {
+                throw new Error("Response type of '" + value + "' not supported.");
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     XMLHttpRequest.prototype._setReadyState = function (value) {
         if (this._readyState !== value) {
             this._readyState = value;
             if (types.isFunction(this.onreadystatechange)) {
                 this.onreadystatechange();
+            }
+        }
+        if (this._readyState === this.DONE) {
+            if (this._errorFlag && types.isFunction(this.onerror)) {
+                this.onerror();
+            }
+            if (!this._errorFlag && types.isFunction(this.onload)) {
+                this.onload();
             }
         }
     };
