@@ -3,7 +3,7 @@ var fs = require("file-system");
 var view = require('ui/core/view');
 var labelModule = require('ui/label');
 var frameModule = require('ui/frame');
-var localSettings = require('local-settings');
+var localSettings = require('application-settings');
 
 var playlistViewModule = require('./view-models/playlists-view-model');
 
@@ -49,7 +49,7 @@ function requestTapedPlaylist(args) {
 
 function makePlaylistRequest(){
 	//got from google developer console
-	var api_key = 'AIzaSyA6J5VCyFQYXcny_U0uWpZTq1oJRavQ_kM';//any referer allowed
+	var api_key =  localSettings.getString('api_key')//'AIzaSyA6J5VCyFQYXcny_U0uWpZTq1oJRavQ_kM';//any referer allowed
 	var finalUrl = 'https://www.googleapis.com/youtube/v3/playlists?part=snippet&mine=true&key=' + api_key;
 
 	var requestOptions = {

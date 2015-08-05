@@ -2,7 +2,7 @@ var http = require('http');
 var frameModule = require('ui/frame');
 var viewModule = require("ui/core/view");
 var gesturesModule = require("ui/gestures");
-var localSettingsModule = require('local-settings');
+var localSettingsModule = require('application-settings');
 var songsViewModule = require('./view-models/songs-view-model');
 
 var listViewModel;
@@ -19,11 +19,11 @@ function onPageLoaded(args){
 
 	// songsListView.observe(gesturesModule.GestureTypes.LongPress, function (args) {});
 
-	makeRequestForSongs(clicked_playlist_id);	
+	makeRequestForSongs(clicked_playlist_id);
 }
 
 function makeRequestForSongs(playlistId){
-	var api_key = 'AIzaSyA6J5VCyFQYXcny_U0uWpZTq1oJRavQ_kM';
+	var api_key =  localSettingsModule.getString('api_key');//'AIzaSyA6J5VCyFQYXcny_U0uWpZTq1oJRavQ_kM';
 
 	var requestUrl = 'https://content.googleapis.com/youtube/v3/playlistItems?part=snippet' + '&playlistId=' + playlistId + '&key=' + api_key
 	var requestOptions = {
